@@ -67,28 +67,37 @@ typedef struct
  *
  * @param[in] data Número en decimal (32 bits).
  * @param[in] digits Cantidad de dígitos a convertir.
- * @param[out] bcd_number Arreglo donde se guardan los dígitos en BCD.
+* @param[out] bcd_number Puntero a un arreglo ya reservado donde se guardarán
+ *                        los dígitos. El dígito más significativo se coloca en
+ *                        bcd_number[0].
  * @return int8_t Devuelve 0 si la conversión fue exitosa.
  */
 
 int8_t convertToBcdArray(uint32_t data, uint8_t digits, uint8_t *bcd_number);
 
 /**
- * @brief Configura los GPIOs según el valor de un dígito BCD.
+ * @brief Establece el estado de 4 pines GPIO a partir de un dígito BCD (0..9).
  *
- * @param[in] bcd_digit Dígito BCD (0 a 9).
- * @param[in] gpio_array Vector de estructuras con los GPIO mapeados a b0-b3.
+ * Recorre los 4 bits (b0..b3) y pone cada GPIO correspondiente en ON/OFF.
+ *
+ * @param[in] bcd_digit  Dígito decimal (0..9) que se representará en BCD.
+ * @param[in] gpio_array Puntero a un arreglo de 4 elementos gpioConf_t donde
+ *                       gpio_array[0] corresponde a b0, gpio_array[1] a b1, etc.
  */
 
 void setGpioFromBcd(uint8_t bcd_digit, gpioConf_t *gpio_array);
 
 /**
- * @brief Muestra un número en el LCD usando BCD y multiplexado.
+ * @brief Muestra un número en un display multiplexado.
  *
- * @param[in] data Número decimal de 32 bits.
- * @param[in] digits Cantidad de dígitos del LCD.
- * @param[in] gpio_array Vector de GPIOs para datos BCD.
- * @param[in] digit_array Vector de GPIOs para selección de dígitos.
+ * Convierte el número a BCD (llenando un arreglo local), luego para cada dígito:
+ *  - pone los 4 bits en las líneas de datos (gpio_array),
+ *  - activa el selector del dígito correspondiente (digit_array[i]) durante un breve periodo.
+ *
+ * @param[in] data        Número entero a mostrar.
+ * @param[in] digits      Cantidad de dígitos a mostrar.
+ * @param[in] gpio_array  Arreglo que mapea bits b0..b3 a GPIOs (4 elementos).
+ * @param[in] digit_array Vector de GPIOs para selección de dígitos. Arreglo que mapea dígitos físicos a GPIOs (digits elementos).
  */
 
 void displayNumber(uint32_t data, uint8_t digits, gpioConf_t *gpio_array, gpioConf_t *digit_array);
@@ -105,8 +114,14 @@ int8_t convertToBcdArray(uint32_t data, uint8_t digits, uint8_t *bcd_number){
 }
 
 /**
- * @brief Mapeo de pines GPIO a bits BCD.
+ * @brief Mapa de pines que corresponden a los bits b0..b3.
+ *
+ * gpio_map[0] -> b0 -> GPIO_20
+ * gpio_map[1] -> b1 -> GPIO_21
+ * gpio_map[2] -> b2 -> GPIO_22
+ * gpio_map[3] -> b3 -> GPIO_23
  */
+
 gpioConf_t gpio_map[4] = {
     {GPIO_20, 1},  /**< b0 */
     {GPIO_21, 1},  /**< b1 */
@@ -115,8 +130,13 @@ gpioConf_t gpio_map[4] = {
 };
 
 /**
- * @brief Mapeo de pines GPIO a dígitos del display.
+ * @brief Pines de selección de dígitos (digit multiplexing).
+ *
+ * digit_map[0] -> dígito 1 -> GPIO_19
+ * digit_map[1] -> dígito 2 -> GPIO_18
+ * digit_map[2] -> dígito 3 -> GPIO_9
  */
+
 gpioConf_t digit_map[3] = {
     {GPIO_19, 1},  /**< Dígito 1 */
     {GPIO_18, 1},  /**< Dígito 2 */
@@ -129,6 +149,7 @@ void setGpioFromBcd(uint8_t bcd_digit, gpioConf_t *gpio_array){
 		GPIOInit(gpio_array[i].pin, gpio_array[i].dir);
 	}
 
+	/* Recorro cada bit del dígito y actualizo el pin correspondiente */
 	for (int i = 0; i < 4; i++){
 		uint8_t bit_val = (bcd_digit >> i) & 0001 ; //pongo el bit de interes en la ultima posición y con & borro todo los demás 
 		if (bit_val  == 1)
@@ -149,23 +170,26 @@ void displayNumber(uint32_t data, uint8_t digits, gpioConf_t *gpio_array, gpioCo
 
 	convertToBcdArray(data, digits, bcd_digits); //uso la funcion para convertir el arreglo en BCD
 
-	// Primero limpio todos los selectores de dígito
+	/* 1) Limpio todos los selectores de digito*/
 	for (int j = 0; j < digits; j++){
 		GPIOInit(digit_array[j].pin, digit_array[j].dir);
 		GPIOOff(digit_array[j].pin);
 		printf("GPIO OFF %d\n", digit_array[j].pin);
 	}
-	 // 2. Recorro cada dígito
+
+	 /* 2) multiplexado: para cada dígito cargar datos, encender selector, apagar selector */
     for (int i = 0; i < digits; i++)
     {
 
         // Cargo el valor BCD en las líneas de datos
         setGpioFromBcd(bcd_digits[i], gpio_array);
 
-        // Activo el dígito correspondiente
+		/*Activo el dígito correspondiente en el LCD */
         GPIOOn(digit_array[i].pin);
+
+		/* Apagar el dígito antes de pasar al siguiente */
         GPIOOff(digit_array[i].pin);
-		printf("GPIO ON %d\n", digit_array[i].pin);
+
 	}
 }
 
@@ -175,7 +199,7 @@ void displayNumber(uint32_t data, uint8_t digits, gpioConf_t *gpio_array, gpioCo
 
 void app_main(void)
 {
-    // Inicializo los GPIOs
+   /* Inicializo pines de datos y selectores (una sola vez) */
     for(int i=0; i<4; i++) {
         GPIOInit(gpio_map[i].pin, gpio_map[i].dir);
     }
@@ -186,7 +210,7 @@ void app_main(void)
     uint32_t numero = numero_a_mostrar;  
     uint8_t digitos = digitos_del_LCD;      
 
-    // Mostrar el número
+   /* Mostrar el número */
     displayNumber(numero, digitos, gpio_map, digit_map);
 
 }
