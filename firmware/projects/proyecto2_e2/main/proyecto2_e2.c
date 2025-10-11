@@ -18,7 +18,7 @@
  * - **Interrupciones por GPIO:** para manejo de teclas.
  * - **Timer MCU:** para temporizar la adquisición de datos.
  *
- * @author  Luciana Cabrera
+ * @author  Luciana Cabrera (lucianacab15@gmail.com)
  * @date    Octubre 2025
  */
 
