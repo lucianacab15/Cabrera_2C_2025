@@ -28,7 +28,7 @@
  * - Interrupciones de teclas (SW1, SW2) cambian estados de medición y retención.
  * - Entrada UART permite comandos remotos equivalentes.
  *
- * @author  Luciana Cabrera
+ * @author  Luciana Cabrera (lucianacab15@gmail.com)
  * @date    Octubre 2025
  */
 
