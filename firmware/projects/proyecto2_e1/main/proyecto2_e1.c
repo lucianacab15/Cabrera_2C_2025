@@ -28,7 +28,7 @@
  * | 	LED_2	 	| 	GPIO_10		|
  * | 	LED_3	 	| 	GPIO_5		|
  * 
- * @author  Luciana Cabrera
+ * @author  Luciana Cabrera (lucianacab15@gmail.com)
  * @date    Octubre 2025
  */
 
