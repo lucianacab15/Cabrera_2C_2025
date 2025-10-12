@@ -5,11 +5,14 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.14.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Sensor Distancia: firmware/projects/proyecto2_e2/main/proyecto2_e2.c File Reference</title>
+<title>Medidor con interrupciones: proyecto2_e2.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
 <script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
 <script type="text/javascript" src="cookie.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
@@ -23,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Sensor Distancia
+   <div id="projectname">Medidor con interrupciones
    </div>
   </td>
  </tr>
@@ -42,11 +45,27 @@ $(function() { codefold.init(); });
 <script type="text/javascript" src="menu.js"></script>
 <script type="text/javascript">
 $(function() {
-  initMenu('',true,false,'search.php','Search',false);
+  initMenu('',true,false,'search.php','Search',true);
   $(function() { init_search(); });
 });
 </script>
 <div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('proyecto2__e2_8c.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -68,17 +87,7 @@ $(function() {
 </div>
 </div>
 
-<div id="nav-path" class="navpath">
-  <ul>
-<li class="navelem"><a href="dir_d9edf6c004b4a7ff14fe9ae7a92214ee.html">firmware</a></li><li class="navelem"><a href="dir_429d80758da54da73083af4edd40d0b3.html">projects</a></li><li class="navelem"><a href="dir_168336a272d314498e5f5a7185cc28f5.html">proyecto2_e2</a></li><li class="navelem"><a href="dir_82ad084bd43a459778d4c339487081f9.html">main</a></li>  </ul>
-</div>
-</div><!-- top -->
-<div id="doc-content">
 <div class="header">
-  <div class="summary">
-<a href="#define-members">Macros</a> &#124;
-<a href="#func-members">Functions</a> &#124;
-<a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">proyecto2_e2.c File Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -87,25 +96,25 @@ $(function() {
 <code>#include &lt;stdbool.h&gt;</code><br />
 <code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
 <code>#include &quot;freertos/task.h&quot;</code><br />
-<code>#include &quot;<a class="el" href="led_8h_source.html">led.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="hc__sr04_8h_source.html">hc_sr04.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="lcditse0803_8h_source.html">lcditse0803.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="switch_8h_source.html">switch.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="timer__mcu_8h_source.html">timer_mcu.h</a>&quot;</code><br />
+<code>#include &quot;led.h&quot;</code><br />
+<code>#include &quot;hc_sr04.h&quot;</code><br />
+<code>#include &quot;lcditse0803.h&quot;</code><br />
+<code>#include &quot;switch.h&quot;</code><br />
+<code>#include &quot;timer_mcu.h&quot;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-define-members" class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a9a265a2fa8b8a1442be25098dec84dac" id="r_a9a265a2fa8b8a1442be25098dec84dac"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9a265a2fa8b8a1442be25098dec84dac">CONFIG_MEASURE_PERIOD</a>&#160;&#160;&#160;300</td></tr>
 <tr class="memdesc:a9a265a2fa8b8a1442be25098dec84dac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Período entre mediciones de distancia (en milisegundos).  <br /></td></tr>
 <tr class="memitem:a0242b872f13ae044f308ee8865fecc57" id="r_a0242b872f13ae044f308ee8865fecc57"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0242b872f13ae044f308ee8865fecc57">MIN_DIST</a>&#160;&#160;&#160;10</td></tr>
-<tr class="memdesc:a0242b872f13ae044f308ee8865fecc57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Umbrales de distancia en centímetros para el encendido de <a class="el" href="group___l_e_d.html#gab6831a7d06c0a2bc69f9b024f6445a80" title="LED driver for the ESP-EDU Board.">LEDs</a>.  <br /></td></tr>
+<tr class="memdesc:a0242b872f13ae044f308ee8865fecc57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Umbrales de distancia en centímetros para el encendido de LEDs.  <br /></td></tr>
 <tr class="memitem:a359b63db3ec4e5bdb8715fa90d9c1db6" id="r_a359b63db3ec4e5bdb8715fa90d9c1db6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a359b63db3ec4e5bdb8715fa90d9c1db6">MED_DIST</a>&#160;&#160;&#160;20</td></tr>
 <tr class="memitem:ae4f6058c45a018de2c45bc43f0c405ae" id="r_ae4f6058c45a018de2c45bc43f0c405ae"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae4f6058c45a018de2c45bc43f0c405ae">MAX_DIST</a>&#160;&#160;&#160;30</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:af53b0757ae0d6272afd6164642e2ca7c" id="r_af53b0757ae0d6272afd6164642e2ca7c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af53b0757ae0d6272afd6164642e2ca7c">encenderLedSegunDistancia</a> (uint32_t distance)</td></tr>
-<tr class="memdesc:af53b0757ae0d6272afd6164642e2ca7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enciende los <a class="el" href="group___l_e_d.html#gab6831a7d06c0a2bc69f9b024f6445a80" title="LED driver for the ESP-EDU Board.">LEDs</a> según el rango de distancia medido.  <br /></td></tr>
+<tr class="memdesc:af53b0757ae0d6272afd6164642e2ca7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enciende los LEDs según el rango de distancia medido.  <br /></td></tr>
 <tr class="memitem:a6b115059c859eddd0df496f4d0c7bac0" id="r_a6b115059c859eddd0df496f4d0c7bac0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6b115059c859eddd0df496f4d0c7bac0">Medir_MostrarPantalla</a> (void *pvParameter)</td></tr>
 <tr class="memdesc:a6b115059c859eddd0df496f4d0c7bac0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Función de callback del temporizador.  <br /></td></tr>
 <tr class="memitem:af107b703d6efb3fd3940faf59cc065a1" id="r_af107b703d6efb3fd3940faf59cc065a1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af107b703d6efb3fd3940faf59cc065a1">tecla_1</a> ()</td></tr>
@@ -117,7 +126,7 @@ Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a49ac0bd7f93b2e3d7db90f37cfb5c377" id="r_a49ac0bd7f93b2e3d7db90f37cfb5c377"><td class="memItemLeft" align="right" valign="top">TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a49ac0bd7f93b2e3d7db90f37cfb5c377">Medir_MostrarPantalla_task_handle</a> = <a class="el" href="ili9341_8c.html#a070d2ce7b6bb7e5c05602aa8c308d0c4">NULL</a></td></tr>
+<tr class="memitem:a49ac0bd7f93b2e3d7db90f37cfb5c377" id="r_a49ac0bd7f93b2e3d7db90f37cfb5c377"><td class="memItemLeft" align="right" valign="top">TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a49ac0bd7f93b2e3d7db90f37cfb5c377">Medir_MostrarPantalla_task_handle</a> = NULL</td></tr>
 <tr class="memdesc:a49ac0bd7f93b2e3d7db90f37cfb5c377"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle de la tarea de medición y visualización.  <br /></td></tr>
 <tr class="memitem:a750f32ce5c5bf53c0964f126de9d490f" id="r_a750f32ce5c5bf53c0964f126de9d490f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a750f32ce5c5bf53c0964f126de9d490f">medir</a> = true</td></tr>
 <tr class="memdesc:a750f32ce5c5bf53c0964f126de9d490f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bandera que indica si se está midiendo distancia.  <br /></td></tr>
@@ -183,8 +192,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Umbrales de distancia en centímetros para el encendido de <a class="el" href="group___l_e_d.html#gab6831a7d06c0a2bc69f9b024f6445a80" title="LED driver for the ESP-EDU Board.">LEDs</a>. </p>
-<p>Distancia mínima: &lt;10 cm, <a class="el" href="group___l_e_d.html#gab6831a7d06c0a2bc69f9b024f6445a80" title="LED driver for the ESP-EDU Board.">LEDs</a> apagados. </p>
+<p>Umbrales de distancia en centímetros para el encendido de LEDs. </p>
+<p>Distancia mínima: &lt;10 cm, LEDs apagados. </p>
 
 </div>
 </div>
@@ -205,7 +214,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Función principal de la aplicación. </p>
-<p>Inicializa todos los periféricos (<a class="el" href="group___l_e_d.html#gab6831a7d06c0a2bc69f9b024f6445a80" title="LED driver for the ESP-EDU Board.">LEDs</a>, LCD, sensor ultrasónico, teclas y timer), configura las interrupciones de teclas y crea la tarea principal de medición. Luego inicia el temporizador que dispara periódicamente la medición. </p>
+<p>Inicializa todos los periféricos (LEDs, LCD, sensor ultrasónico, teclas y timer), configura las interrupciones de teclas y crea la tarea principal de medición. Luego inicia el temporizador que dispara periódicamente la medición. </p>
 <p>&lt; Conversión de ms a µs.</p>
 
 </div>
@@ -225,7 +234,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Enciende los <a class="el" href="group___l_e_d.html#gab6831a7d06c0a2bc69f9b024f6445a80" title="LED driver for the ESP-EDU Board.">LEDs</a> según el rango de distancia medido. </p>
+<p>Enciende los LEDs según el rango de distancia medido. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">distance</td><td>Distancia medida en centímetros.</td></tr>
@@ -233,7 +242,7 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 <ul>
-<li>&lt;10 cm: Todos los <a class="el" href="group___l_e_d.html#gab6831a7d06c0a2bc69f9b024f6445a80" title="LED driver for the ESP-EDU Board.">LEDs</a> apagados. <br  />
+<li>&lt;10 cm: Todos los LEDs apagados. <br  />
 </li>
 <li>10–20 cm: Enciende LED_1. <br  />
 </li>
@@ -260,20 +269,13 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Función de callback del temporizador. </p>
-<p>Callback del temporizador: notifica a la tarea de medición.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">pvParameter</td><td>Parámetro del callback (no utilizado).</td></tr>
   </table>
   </dd>
 </dl>
-<p>Esta función se ejecuta cada vez que el temporizador MCU vence su período, notificando a la tarea <span class="tt">Medir_MostrarPantalla_Task</span> para que realice una nueva medición.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pvParameter</td><td>Parámetro de callback (no utilizado). </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Esta función se ejecuta cada vez que el temporizador MCU vence su período, notificando a la tarea <span class="tt">Medir_MostrarPantalla_Task</span> para que realice una nueva medición. </p>
 
 </div>
 </div>
@@ -295,7 +297,7 @@ Variables</h2></td></tr>
 <p>Callback de la tecla 1. </p>
 <p>Alterna la bandera <span class="tt">medir</span>. <br  />
  Si se desactiva la medición:</p><ul>
-<li>Apaga todos los <a class="el" href="group___l_e_d.html#gab6831a7d06c0a2bc69f9b024f6445a80" title="LED driver for the ESP-EDU Board.">LEDs</a>.</li>
+<li>Apaga todos los LEDs.</li>
 <li>Limpia el display LCD. </li>
 </ul>
 
@@ -361,7 +363,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">TaskHandle_t Medir_MostrarPantalla_task_handle = <a class="el" href="ili9341_8c.html#a070d2ce7b6bb7e5c05602aa8c308d0c4">NULL</a></td>
+          <td class="memname">TaskHandle_t Medir_MostrarPantalla_task_handle = NULL</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -371,10 +373,21 @@ Variables</h2></td></tr>
 </div>
 </div>
 </div><!-- contents -->
-<!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0
-</small></address>
 </div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="proyecto2__e2_8c.html">proyecto2_e2.c</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
+  </ul>
+</div>
 </body>
 </html>
